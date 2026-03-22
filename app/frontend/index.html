@@ -17,10 +17,10 @@
                 <span class="logo-sub">HR Leave Management System</span>
             </div>
             <nav>
-                <button class="nav-btn active" onclick="showPage('dashboard')">Dashboard</button>
-                <button class="nav-btn" onclick="showPage('employees')">Employees</button>
-                <button class="nav-btn" onclick="showPage('leave')">Leave Requests</button>
-                <button class="nav-btn" onclick="showPage('reports')">Reports</button>
+                <button class="nav-btn active" onclick="showPage('dashboard', 'this')">Dashboard</button>
+                <button class="nav-btn" onclick="showPage('employees', 'this')">Employees</button>
+                <button class="nav-btn" onclick="showPage('leave', 'this')">Leave Requests</button>
+                <button class="nav-btn" onclick="showPage('reports', 'this')">Reports</button>
             </nav>
         </header>
 
@@ -38,7 +38,7 @@
                         <div class="page-sub">Overview of Leave Activity</div>
                     </div>
                 </div>
-                <div class="stas" id="stats-row">
+                <div class="stats" id="stats-row">
                     <div class="stat stat-accent"><div class="stat-value" id="stat-employees">-</div><div class="stat-label">Employees</div></div>
                     <div class="stat"><div class="stat-value" id="stat-pending">-</div><div class="stat-label">Pending Requests</div></div>
                     <div class="stat"><div class="stat-value" id="stat-approved">-</div><div class="stat-label">Approved</div></div>
@@ -81,7 +81,7 @@
                 </div>
                 <div class="card">
                     <table>
-                        <thead><tr><th>ID</th><th>Employee</th><th>Type</th><th>Start</th><th>Days</th><th>Status</th><th>Document</th><th>Actions</th></tr></thead>
+                        <thead><tr><th>ID</th><th>Employee</th><th>Type</th><th>Start</th><th>End</th><th>Days</th><th>Status</th><th>Document</th><th>Actions</th></tr></thead>
                         <tbody id="leave-table"><tr><td colspan="9" class="loading">Loading...</td></tr></tbody>
                     </table>
                 </div>
@@ -118,7 +118,7 @@
             <div class="modal">
                 <div class="modal-header">
                     <span class="modal-title">Add Employee</span>
-                    <button class="modla-close" onclick="closeModal('modal-add-employee')">x</button>
+                    <button class="modal-close" onclick="closeModal('modal-add-employee')">x</button>
                 </div>
                 <div class="form-grid">
                     <div class="form-group"><label>Full Name</label><input id="emp-name" type="text" placeholder="e.g. John Brown"></div>
@@ -144,7 +144,7 @@
             <div class="modal">
                 <div class="modal-header">
                     <span class="modal-title">Submit Leave Request</span>
-                    <button class="modla-close" onclick="closeModal('modal-submit-leave')">x</button>
+                    <button class="modal-close" onclick="closeModal('modal-submit-leave')">x</button>
                 </div>
                 <div class="form-grid">
                     <div class="form-group full">
@@ -160,7 +160,7 @@
                     </div>
                     <div class="form-group"></div>
                     <div class="form-group"><label>Start Date</label><input id="leave-start" type="date"></div>
-                    <div class="form-group"><lavel>End Date</lavel><input id="leave-end" type="date"></div>
+                    <div class="form-group"><label>End Date</label><input id="leave-end" type="date"></div>
                 </div>
                 <div class="form-actions">
                     <button class="btn btn-ghost" onclick="closeModal('modal-submit-leave')">Cancel</button>
@@ -174,7 +174,7 @@
             <div class="modal">
                 <div class="modal-header">
                     <span class="modal-title">Upload Sick Note</span>
-                    <button class="modla-close" onclick="closeModal('modal-upload-sick')">x</button>
+                    <button class="modal-close" onclick="closeModal('modal-upload-sick')">x</button>
                 </div>
                 <div class="form-grid cols-1">
                     <div class="form-group">

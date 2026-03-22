@@ -15,7 +15,9 @@ class EmployeeDto(BaseModel):
     type: PaymentType
     date_hired: date
 
-
+@employee_router.get("/leave-balances", status_code=200)
+def list_leave_balances():
+    return db.read_all_records("leave_balances")
 @employee_router.post("/employees", status_code=status.HTTP_201_CREATED)
 def add_employee(data: EmployeeDto):
     # Prevent duplicates

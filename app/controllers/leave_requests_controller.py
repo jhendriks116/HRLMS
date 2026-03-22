@@ -29,6 +29,10 @@ class StatusUpdateDto(BaseModel):
 
 # CREATE LEAVE REQUEST
 
+@leave_request_router.get("/leave-requests", status_code=200)
+def list_leave_request():
+    return db.read_all_records("leave_requests")
+
 @leave_request_router.post("/leave-requests", status_code=201)
 def create_leave_request(data: LeaveRequestDto):
 

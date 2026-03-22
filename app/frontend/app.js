@@ -8,7 +8,7 @@ function showPage(name) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('page-' + name).classList.add('active');
-    event.target.classList.add('active');
+    if (btn) btn.classList.add('active');
     if (name == 'dashboard') loadDashboard();
     if (name == 'employees') loadEmployees();
     if (name == 'leave') loadLeave();
@@ -17,6 +17,10 @@ function showPage(name) {
 //Modal
 function openModal(id) {
     if (id == 'modal-submit-leave') populateEmployeeSelect();
+    document.getElementById(id).classList.add('open');
+}
+
+function closeModal(id) {
     document.getElementById(id).classList.remove('open');
 }
 
@@ -24,7 +28,7 @@ function openModal(id) {
 function toast(msg, type = '') {
     const t = document.getElementById('toast');
     t.textContent = msg;
-    t.className = 'show' + 'type';
+    t.className = 'show' + type;
     setTimeout(() => t.className = '', 3000);
 }
 
@@ -35,14 +39,14 @@ async function get(path) {
         if (!r.ok) throw new Error(await r.text());
         return await r.json();
     } catch (e) {
-        toast('Error: ' = e.message, 'error');
+        toast('Error: ' + e.message, 'error');
         return null;
     }
 }
 
 async function post(path, body) {
     try {
-        const r = await fetch(API = path, {
+        const r = await fetch(API + path, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body)
@@ -146,7 +150,7 @@ async function addEmployee() {
     if (res) {
         toast('Employee Added - ID ' + res.employee_id, 'success');
         closeModal('modal-add-employee');
-        loadEmployees;
+        loadEmployees();
     }
 }
 
@@ -158,7 +162,7 @@ function populateEmployeeSelect() {
 //Leave Requests
 async function loadLeave() {
     const [emps, reqs] = await Promise.all([get('/employees'), get('/leave-requests')]);
-    if (!emps || reqs) return;
+    if (!emps || !reqs) return;
     employees = emps; leaveRequests = reqs;
 
     const tbody = document.getElementById('leave-table');
@@ -172,7 +176,7 @@ async function loadLeave() {
         let actions = '';
         if (isPending) {
             actions += `<button class="btn btn-approve btn-sm" onclick="updateStatus(${r.id}, 'approved')">Approve</button>`;
-            actions += `<button class="btn btn-reject btn-sm" onclick="updateStatus(${r.id}, 'rejected')">reject</button>`;
+            actions += `<button class="btn btn-reject btn-sm" onclick="updateStatus(${r.id}, 'rejected')">Reject</button>`;
         }
         if (needsDoc) {
             actions += `<button class="btn btn-ghost btn-sm" onclick="openUpload(${r.id})">Upload</button>`;
@@ -211,9 +215,9 @@ async function submitLeave() {
 
 //Approve / Reject
 async function updateStatus(id, status) {
-    const res = await patch('/leave-requests/${id}/stauts', { status });
+    const res = await patch(`/leave-requests/${id}/status`, { status });
     if (res) {
-        toast('Request ${status}', 'success');
+        toast(`Request ${status}`, 'success');
         loadLeave();
         loadDashboard();
     }
@@ -231,7 +235,7 @@ async function uploadSickNote() {
     const form = new FormData();
     form.append('file', file);
     try {
-        const r = await fetch('${API}/leave-requests/${uploadTargetID}/upload-sick-note', {
+        const r = await fetch(`${API}/leave-requests/${uploadTargetID}/upload-sick-note`, {
             method: 'POST', body: form
         });
         const data = await r.json();
