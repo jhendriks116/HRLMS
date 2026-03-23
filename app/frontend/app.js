@@ -4,7 +4,7 @@ let leaveRequests = [];
 let uploadTargetId = null;
 
 //Navigation
-function showPage(name) {
+function showPage(name, btn) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('page-' + name).classList.add('active');
@@ -28,14 +28,15 @@ function closeModal(id) {
 function toast(msg, type = '') {
     const t = document.getElementById('toast');
     t.textContent = msg;
-    t.className = 'show' + type;
+    t.className = 'show ' + type;
     setTimeout(() => t.className = '', 3000);
 }
 
 //API Helpers
 async function get(path) {
     try {
-        const r = await fetch(API + path);
+        const separator = path.includes('?') ? '&' : '?';
+        const r = await fetch(API + path + separator + '_=' + Date.now());
         if (!r.ok) throw new Error(await r.text());
         return await r.json();
     } catch (e) {
@@ -220,6 +221,7 @@ async function updateStatus(id, status) {
         toast(`Request ${status}`, 'success');
         loadLeave();
         loadDashboard();
+        loadEmployees();
     }
 }
 
@@ -235,7 +237,7 @@ async function uploadSickNote() {
     const form = new FormData();
     form.append('file', file);
     try {
-        const r = await fetch(`${API}/leave-requests/${uploadTargetID}/upload-sick-note`, {
+        const r = await fetch(`${API}/leave-requests/${uploadTargetId}/upload-sick-note`, {
             method: 'POST', body: form
         });
         const data = await r.json();
