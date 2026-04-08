@@ -1,7 +1,0 @@
-fastapi
-uvicorn[standard]
-pydantic
-pandas
-openpyxl
-python-multipart
-sqlmodel
