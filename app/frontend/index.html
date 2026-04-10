@@ -60,7 +60,10 @@
                         <div class="page-title">Employees</div>
                         <div class="page-sub">Manage Employee Records and Leave Balances</div>
                     </div>
-                    <button class="btn btn-primary" onclick="openModal('modal-add-employee')">+ Add Employee</button>
+                    <div style="display:flex;gap:8px;">
+                        <button class="btn btn-ghost" onclick="openAdjustModal()">Adjust Balance</button>
+                        <button class="btn btn-primary" onclick="openModal('modal-add-employee')">+ Add Employee</button>
+                    </div>
                 </div>
                 <div class="card">
                     <table>
@@ -168,6 +171,37 @@
                 </div>
             </div>
         </div>
+
+        <!--Modal: Adjust Leave Balance-->
+<div class="modal-overlay" id="modal-adjust-balance">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="modal-title">Adjust Leave Balance — UC03</span>
+            <button class="modal-close" onclick="closeModal('modal-adjust-balance')">✕</button>
+        </div>
+        <div class="form-grid">
+            <div class="form-group full">
+                <label>Employee</label>
+                <select id="adjust-employee-id"></select>
+            </div>
+            <div class="form-group">
+                <label>Leave Type</label>
+                <select id="adjust-leave-type">
+                    <option value="vacation">Vacation</option>
+                    <option value="sick">Sick</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Adjustment (Days)</label>
+                <input id="adjust-days" type="number" placeholder="e.g. 3 to add, -2 to deduct">
+            </div>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-ghost" onclick="closeModal('modal-adjust-balance')">Cancel</button>
+            <button class="btn btn-primary" onclick="adjustBalance()">Adjust Balance</button>
+        </div>
+    </div>
+</div>
 
         <!--Modal: Upload Sick Note-->
         <div class="modal-overlay" id="modal-upload-sick">

@@ -111,3 +111,28 @@ class EmployeeService:
                 "remaining_days": sick_entitled,
                 "last_updated": date.today()
             })
+
+    @staticmethod
+    def adjust_leave_balance(employee_id: int, leave_type: str, adjustment: int, year: int) -> dict:
+        #Manually adjust entitled_days for an employee
+        balance = db.find_one(
+            "leave_balances",
+            employee_id=employee_id,
+            leave_type=leave_type,
+            year=year
+        )
+        if not balance:
+            raise ValueError("Leave balance not found")
+
+        new_entitled = balance["entitled_days"] + adjustment
+        if new_entitled < 0:
+            raise ValueError("Entitled days cannot be negative")
+
+        new_remaining = max(0, new_entitled - balance["used_days"])
+
+        db.update_record("leave_balances", balance["id"], {
+            "entitled_days": new_entitled,
+            "remaining_days": new_remaining,
+            "last_updated": date.today().isoformat()
+        })
+        return db.read_record("leave_balances", balance["id"])

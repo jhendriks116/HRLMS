@@ -250,5 +250,43 @@ async function uploadSickNote() {
     }
 }
 
+//Adjust Leave Balance
+function openAdjustModal() {
+    const sel = document.getElementById('adjust-employee-id');
+    sel.innerHTML = employees.map(e =>
+        `<option value="${e.id}">${e.name} (${e.type})</option>`
+    ).join('');
+    openModal('modal-adjust-balance');
+}
+
+async function adjustBalance() {
+    const employee_id = parseInt(document.getElementById('adjust-employee-id').value);
+    const leave_type  = document.getElementById('adjust-leave-type').value;
+    const adjustment  = parseInt(document.getElementById('adjust-days').value);
+
+    if (isNaN(adjustment)) {
+        toast('Please enter a valid number of days', 'error');
+        return;
+    }
+    if (adjustment === 0) {
+        toast('Adjustment cannot be zero', 'error');
+        return;
+    }
+
+    const res = await patch(`/employees/${employee_id}/adjust-balance`, {
+        leave_type,
+        adjustment,
+        year: new Date().getFullYear()
+    });
+
+    if (res) {
+        const direction = adjustment > 0 ? 'added' : 'deducted';
+        const days = Math.abs(adjustment);
+        toast(`${days} day(s) ${direction} successfully`, 'success');
+        closeModal('modal-adjust-balance');
+        loadEmployees();
+    }
+}
+
 //Init
 loadDashboard();

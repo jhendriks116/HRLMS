@@ -28,7 +28,7 @@ def add_employee(data: EmployeeDto):
     employee = db.create_record("employees", {
         "name": data.name,
         "email": data.email,
-        "type": data.type.value,       # ✅ FIXED ENUM VALUE
+        "type": data.type.value,
         "date_hired": data.date_hired
     })
 
@@ -52,3 +52,31 @@ def get_employee(employee_id: int):
 @employee_router.get("/employees", status_code=status.HTTP_200_OK)
 def list_employees():
     return db.read_all_records("employees")
+
+class AdjustBalanceDto(BaseModel):
+    leave_type: str
+    adjustment: int
+    year: int = None
+
+@employee_router.patch("/employees/{employee_id}/adjust-balance", status_code=200)
+def adjust_balance(employee_id: int, data: AdjustBalanceDto):
+    employee = db.find_one("employees", id=employee_id)
+    if not employee:
+        raise HTTPException(404, "Employee not found")
+    try:
+        year = data.year or date.today().year
+        updated = EmployeeService.adjust_leave_balance(
+            employee_id, data.leave_type, data.adjustment, year
+        )
+        return { "message": "Balance adjusted", "updated_balance": updated }
+    except ValueError as e:
+        raise HTTPException(400, str(e))
+
+@employee_router.post("/employees/{employee_id}/recalculate-balance", status_code=200)
+def recalculate_balance(employee_id: int):
+    #Recalculates entitlement based on current years of service.
+    employee = db.find_one("employees", id=employee_id)
+    if not employee:
+        raise HTTPException(404, "Employee not found")
+    EmployeeService.init_leave_balance(employee, date.today().year)
+    return { "message": "Balance recalculated successfully" }
