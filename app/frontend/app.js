@@ -252,6 +252,10 @@ async function uploadSickNote() {
 
 //Adjust Leave Balance
 function openAdjustModal() {
+    if (!employees.length) {
+        toast('Load the Employees tab first', 'error');
+        return;
+    }
     const sel = document.getElementById('adjust-employee-id');
     sel.innerHTML = employees.map(e =>
         `<option value="${e.id}">${e.name} (${e.type})</option>`

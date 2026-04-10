@@ -17,10 +17,10 @@
                 <span class="logo-sub">HR Leave Management System</span>
             </div>
             <nav>
-                <button class="nav-btn active" onclick="showPage('dashboard', 'this')">Dashboard</button>
-                <button class="nav-btn" onclick="showPage('employees', 'this')">Employees</button>
-                <button class="nav-btn" onclick="showPage('leave', 'this')">Leave Requests</button>
-                <button class="nav-btn" onclick="showPage('reports', 'this')">Reports</button>
+                <button class="nav-btn active" onclick="showPage('dashboard', this)">Dashboard</button>
+                <button class="nav-btn" onclick="showPage('employees', this)">Employees</button>
+                <button class="nav-btn" onclick="showPage('leave', this)">Leave Requests</button>
+                <button class="nav-btn" onclick="showPage('reports', this)">Reports</button>
             </nav>
         </header>
 
@@ -173,35 +173,35 @@
         </div>
 
         <!--Modal: Adjust Leave Balance-->
-<div class="modal-overlay" id="modal-adjust-balance">
-    <div class="modal">
-        <div class="modal-header">
-            <span class="modal-title">Adjust Leave Balance — UC03</span>
-            <button class="modal-close" onclick="closeModal('modal-adjust-balance')">✕</button>
-        </div>
-        <div class="form-grid">
-            <div class="form-group full">
-                <label>Employee</label>
-                <select id="adjust-employee-id"></select>
+        <div class="modal-overlay" id="modal-adjust-balance">
+            <div class="modal">
+                <div class="modal-header">
+                    <span class="modal-title">Adjust Leave Balance</span>
+                    <button class="modal-close" onclick="closeModal('modal-adjust-balance')">✕</button>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group full">
+                        <label>Employee</label>
+                        <select id="adjust-employee-id"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Leave Type</label>
+                        <select id="adjust-leave-type">
+                            <option value="vacation">Vacation</option>
+                            <option value="sick">Sick</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Adjustment (Days)</label>
+                        <input id="adjust-days" type="number" placeholder="e.g. 3 to add, -2 to deduct">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-ghost" onclick="closeModal('modal-adjust-balance')">Cancel</button>
+                    <button class="btn btn-primary" onclick="adjustBalance()">Adjust Balance</button>
+                </div>
             </div>
-            <div class="form-group">
-                <label>Leave Type</label>
-                <select id="adjust-leave-type">
-                    <option value="vacation">Vacation</option>
-                    <option value="sick">Sick</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Adjustment (Days)</label>
-                <input id="adjust-days" type="number" placeholder="e.g. 3 to add, -2 to deduct">
-            </div>
         </div>
-        <div class="form-actions">
-            <button class="btn btn-ghost" onclick="closeModal('modal-adjust-balance')">Cancel</button>
-            <button class="btn btn-primary" onclick="adjustBalance()">Adjust Balance</button>
-        </div>
-    </div>
-</div>
 
         <!--Modal: Upload Sick Note-->
         <div class="modal-overlay" id="modal-upload-sick">
